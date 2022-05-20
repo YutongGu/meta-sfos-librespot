@@ -7,4 +7,4 @@ require recipes-core/images/core-image-minimal.bb
 
 #IMAGE_INSTALL_append = " rust"
 #IMAGE_INSTALL_append = " rust-hello-world"
-IMAGE_INSTALL_append = " librespot"
+IMAGE_INSTALL:append = " librespot"

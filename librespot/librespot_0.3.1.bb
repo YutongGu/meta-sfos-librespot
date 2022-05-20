@@ -2,19 +2,23 @@
 #
 inherit cargo pkgconfig module-base
 
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+
 # If this is git based prefer versioned ones if they exist
 # DEFAULT_PREFERENCE = "-1"
 
 # how to get librespot could be as easy as but default to a git checkout:
 # SRC_URI += "crate://crates.io/librespot/0.3.1"
-SRC_URI += "git://github.com/librespot-org/librespot.git;protocol=https;nobranch=1"
+SRC_URI:append = "git://github.com/librespot-org/librespot.git;protocol=https;nobranch=1 \
+                  file://0001-explicitly-enable-std-for-priority-queue.patch"
 SRCREV = "c1ac4cbb3ad3bbdaeb6f8582186442c69cdae744"
+
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = ""
 
 #DEPENDS += "alsa-lib pulseaudio-dev"
 DEPENDS += " alsa-lib avahi"
-RDEPENDS_${PN} = " libavahi-compat-libdnssd-dev"
+RDEPENDS:${PN} = " libavahi-compat-libdnssd-dev"
 CARGO_BUILD_FLAGS += '--features "alsa-backend" --features "with-dns-sd"'
 
 # please note if you have entries that do not begin with crate://

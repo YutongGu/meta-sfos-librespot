@@ -1,0 +1,41 @@
+From a51ef8a751f9107b4e43055362a1400e6280c2c3 Mon Sep 17 00:00:00 2001
+From: Yutong Gu <ygu@jukeaudio.com>
+Date: Tue, 17 May 2022 23:11:39 -0700
+Subject: [PATCH] explicitly enable std for priority queue
+
+---
+ core/src/cache.rs | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/core/src/cache.rs b/core/src/cache.rs
+index 612b7c3..c73277c 100644
+--- a/core/src/cache.rs
++++ b/core/src/cache.rs
+@@ -11,11 +11,14 @@ use priority_queue::PriorityQueue;
+ use crate::authentication::Credentials;
+ use crate::spotify_id::FileId;
+ 
++extern crate std as probe;
++use std::collections::hash_map::RandomState;
++
+ /// Some kind of data structure that holds some paths, the size of these files and a timestamp.
+ /// It keeps track of the file sizes and is able to pop the path with the oldest timestamp if
+ /// a given limit is exceeded.
+ struct SizeLimiter {
+-    queue: PriorityQueue<PathBuf, Reverse<SystemTime>>,
++    queue: PriorityQueue<PathBuf, Reverse<SystemTime>, RandomState>,
+     sizes: HashMap<PathBuf, u64>,
+     size_limit: u64,
+     in_use: u64,
+@@ -25,7 +28,7 @@ impl SizeLimiter {
+     /// Creates a new instance with the given size limit.
+     fn new(limit: u64) -> Self {
+         Self {
+-            queue: PriorityQueue::new(),
++            queue: PriorityQueue::default(),
+             sizes: HashMap::new(),
+             size_limit: limit,
+             in_use: 0,
+-- 
+2.25.1
+
