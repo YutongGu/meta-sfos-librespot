@@ -15,7 +15,7 @@ PV_append = ".AUTOINC+6537c441c3"
 
 #DEPENDS += "alsa-lib pulseaudio-dev"
 DEPENDS += " alsa-lib avahi"
-RDEPENDS:${PN} = " libavahi-compat-libdnssd-dev"
+RDEPENDS_${PN} = " libavahi-compat-libdnssd"
 CARGO_BUILD_FLAGS += '--features "alsa-backend" --features "with-dns-sd"'
 
 # please note if you have entries that do not begin with crate://
