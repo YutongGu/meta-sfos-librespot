@@ -15,13 +15,13 @@ PV_append = ".AUTOINC+6537c441c3"
 
 #DEPENDS += "alsa-lib pulseaudio-dev"
 DEPENDS += " alsa-lib avahi"
-RDEPENDS:${PN} = " libavahi-compat-libdnssd-dev"
+RDEPENDS_${PN} = " libavahi-compat-libdnssd"
 CARGO_BUILD_FLAGS += '--features "alsa-backend" --features "with-dns-sd"'
 
 # please note if you have entries that do not begin with crate://
 # you must change them to how that package can be fetched
 SRC_URI += " \
-    crate://crates.io/addr2line/0.18.0 \
+    crate://crates.io/addr2line/0.17.0 \
     crate://crates.io/adler/1.0.2 \
     crate://crates.io/aes-ctr/0.6.0 \
     crate://crates.io/aes-soft/0.6.4 \
