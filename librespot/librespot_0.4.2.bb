@@ -11,11 +11,11 @@ SRC_URI += "git://github.com/librespot-org/librespot.git;protocol=https;nobranch
 SRCREV = "6537c441c3082aa2a7bbfe20e2afc316962dfc6a"
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = ""
-PV_append = ".AUTOINC+6537c441c3"
+PV:append = ".AUTOINC+6537c441c3"
 
 #DEPENDS += "alsa-lib pulseaudio-dev"
 DEPENDS += " alsa-lib avahi"
-RDEPENDS_${PN} = " libavahi-compat-libdnssd"
+RDEPENDS:${PN} = " libavahi-compat-libdnssd"
 CARGO_BUILD_FLAGS += '--features "alsa-backend" --features "with-dns-sd"'
 
 # please note if you have entries that do not begin with crate://
