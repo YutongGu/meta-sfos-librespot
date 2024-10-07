@@ -1,0 +1,202 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 24fe042..5c6d7fa 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -58,55 +58,6 @@ dependencies = [
+  "pkg-config",
+ ]
+ 
+-[[package]]
+-name = "anstream"
+-version = "0.6.14"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "418c75fa768af9c03be99d17643f93f79bbba589895012a80e3452a19ddda15b"
+-dependencies = [
+- "anstyle",
+- "anstyle-parse",
+- "anstyle-query",
+- "anstyle-wincon",
+- "colorchoice",
+- "is_terminal_polyfill",
+- "utf8parse",
+-]
+-
+-[[package]]
+-name = "anstyle"
+-version = "1.0.7"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "038dfcf04a5feb68e9c60b21c9625a54c2c0616e79b72b0fd87075a056ae1d1b"
+-
+-[[package]]
+-name = "anstyle-parse"
+-version = "0.2.4"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c03a11a9034d92058ceb6ee011ce58af4a9bf61491aa7e1e59ecd24bd40d22d4"
+-dependencies = [
+- "utf8parse",
+-]
+-
+-[[package]]
+-name = "anstyle-query"
+-version = "1.1.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "ad186efb764318d35165f1758e7dcef3b10628e26d41a44bc5550652e6804391"
+-dependencies = [
+- "windows-sys 0.52.0",
+-]
+-
+-[[package]]
+-name = "anstyle-wincon"
+-version = "3.0.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "61a38449feb7068f52bb06c12759005cf459ee52bb4adc1d5a7c4322d716fb19"
+-dependencies = [
+- "anstyle",
+- "windows-sys 0.52.0",
+-]
+-
+ [[package]]
+ name = "anyhow"
+ version = "1.0.86"
+@@ -309,12 +260,6 @@ dependencies = [
+  "libloading 0.8.3",
+ ]
+ 
+-[[package]]
+-name = "colorchoice"
+-version = "1.0.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "0b6a852b24ab71dffc585bcb46eaf7959d175cb865a7152e35b348d1b2960422"
+-
+ [[package]]
+ name = "combine"
+ version = "4.6.7"
+@@ -499,27 +444,17 @@ dependencies = [
+  "cfg-if",
+ ]
+ 
+-[[package]]
+-name = "env_filter"
+-version = "0.1.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a009aa4810eb158359dda09d0c87378e4bbb89b5a801f016885a4707ba24f7ea"
+-dependencies = [
+- "log",
+- "regex",
+-]
+-
+ [[package]]
+ name = "env_logger"
+-version = "0.11.3"
++version = "0.10.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "38b35839ba51819680ba087cd351788c9a3c476841207e0b8cee0b04722343b9"
++checksum = "4cd405aab171cb85d6735e5c8d9db038c17d3ca007a4d2c25f337935c3d90580"
+ dependencies = [
+- "anstream",
+- "anstyle",
+- "env_filter",
+  "humantime",
++ "is-terminal",
+  "log",
++ "regex",
++ "termcolor",
+ ]
+ 
+ [[package]]
+@@ -978,6 +913,12 @@ version = "0.3.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "d231dfb89cfffdbc30e7fc41579ed6066ad03abda9e567ccafae602b97ec5024"
+ 
++[[package]]
++name = "hermit-abi"
++version = "0.4.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "fbf6a919d6cf397374f7dfeeea91d974c7c0a7221d0d0f4f20d859d329e53fcc"
++
+ [[package]]
+ name = "hex"
+ version = "0.4.3"
+@@ -1316,10 +1257,15 @@ dependencies = [
+ ]
+ 
+ [[package]]
+-name = "is_terminal_polyfill"
+-version = "1.70.0"
++name = "is-terminal"
++version = "0.4.13"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f8478577c03552c21db0e2724ffb8986a5ce7af88107e6be5d2ee6e158c12800"
++checksum = "261f68e344040fbd0edea105bef17c66edf46f984ddb1115b775ce31be948f4b"
++dependencies = [
++ "hermit-abi 0.4.0",
++ "libc",
++ "windows-sys 0.52.0",
++]
+ 
+ [[package]]
+ name = "itertools"
+@@ -1983,7 +1929,7 @@ version = "1.16.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "4161fcb6d602d4d2081af7c3a45852d875a03dd337a6bfdd6e06407b61342a43"
+ dependencies = [
+- "hermit-abi",
++ "hermit-abi 0.3.9",
+  "libc",
+ ]
+ 
+@@ -2982,6 +2928,15 @@ dependencies = [
+  "windows-sys 0.52.0",
+ ]
+ 
++[[package]]
++name = "termcolor"
++version = "1.4.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "06794f8f6c5c898b3275aebefa6b8a1cb24cd2c6c79397ab15774837a0bc5755"
++dependencies = [
++ "winapi-util",
++]
++
+ [[package]]
+ name = "thiserror"
+ version = "1.0.61"
+@@ -3317,12 +3272,6 @@ version = "1.0.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "b6c140620e7ffbb22c2dee59cafe6084a59b5ffc27a8859a5f0d494b5d52b6be"
+ 
+-[[package]]
+-name = "utf8parse"
+-version = "0.2.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
+-
+ [[package]]
+ name = "uuid"
+ version = "1.8.0"
+diff --git a/Cargo.toml b/Cargo.toml
+index b99531b..44b5bc8 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -51,7 +51,7 @@ version = "0.5.0-dev"
+ 
+ [dependencies]
+ data-encoding = "2.5"
+-env_logger =  { version = "0.11.2", default-features = false, features = ["color", "humantime", "auto-color"] }
++env_logger =  { version = "0.10.2", default-features = false, features = ["color", "humantime", "auto-color"] }
+ futures-util = { version = "0.3", default-features = false }
+ getopts = "0.2"
+ log = "0.4"
+diff --git a/core/Cargo.toml b/core/Cargo.toml
+index ea9a906..9398c77 100644
+--- a/core/Cargo.toml
++++ b/core/Cargo.toml
+@@ -65,7 +65,7 @@ rand = "0.8"
+ vergen = { version = "8", default-features = false, features = ["build", "git", "gitcl"] }
+ 
+ [dev-dependencies]
+-env_logger = "0.11.2"
++env_logger = "0.10.2"
+ tokio = { version = "1", features = ["macros", "parking_lot"] }
+ 
+ [features]
