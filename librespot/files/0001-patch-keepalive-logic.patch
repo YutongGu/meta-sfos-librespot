@@ -15,7 +15,7 @@ index f934ed7b3..3594e37f5 100644
  
          match packet_type {
              Some(Ping) => {
-+                info!("Received Ping");
++                debug!("Received Ping");
                  let server_timestamp = BigEndian::read_u32(data.as_ref()) as i64;
                  let timestamp = SystemTime::now()
                      .duration_since(UNIX_EPOCH)
@@ -28,7 +28,7 @@ index f934ed7b3..3594e37f5 100644
 +                tokio::spawn(async move {
 +                    tokio::time::sleep(tokio::time::Duration::from_secs(60)).await;
 +                    if let Some(session) = session.try_upgrade() {
-+                        info!("Sending Pong");
++                        debug!("Sending Pong");
 +                        let _ = session.send_packet(Pong, vec![0, 0, 0, 0]);
 +                    }
 +
@@ -39,7 +39,7 @@ index f934ed7b3..3594e37f5 100644
 +                Ok(())
 +            }
 +            Some(PongAck) => {
-+                info!("Received PongAck");
++                debug!("Received PongAck");
 +                Ok(())
              }
              Some(CountryCode) => {
