@@ -1,0 +1,205 @@
+From 8e58c1ed461c76b7937a28b90e4fd0c2c78d3277 Mon Sep 17 00:00:00 2001
+From: Michael Herger <michael@herger.net>
+Date: Tue, 17 Sep 2024 09:16:56 +0200
+Subject: [PATCH] Manually patch fix for #1236
+
+---
+ playback/src/player.rs              |  4 ++++
+ protocol/proto/media_manifest.proto | 12 ++++++----
+ protocol/proto/metadata.proto       | 34 ++++++++++++++++-------------
+ 3 files changed, 31 insertions(+), 19 deletions(-)
+
+diff --git a/playback/src/player.rs b/playback/src/player.rs
+index 6b2d27565..3d7d63495 100644
+--- a/playback/src/player.rs
++++ b/playback/src/player.rs
+@@ -914,6 +914,10 @@ impl PlayerTrackLoader {
+             AudioFileFormat::AAC_24 => 3,
+             AudioFileFormat::AAC_48 => 6,
+             AudioFileFormat::FLAC_FLAC => 112, // assume 900 kbit/s on average
++            AudioFileFormat::AAC_160 => 20,
++            AudioFileFormat::AAC_320 => 40,
++            AudioFileFormat::MP4_128 => 16,
++            AudioFileFormat::OTHER5 => 40,
+         };
+         kbps * 1024
+     }
+diff --git a/protocol/proto/media_manifest.proto b/protocol/proto/media_manifest.proto
+index 6e280259a..1af7ba704 100644
+--- a/protocol/proto/media_manifest.proto
++++ b/protocol/proto/media_manifest.proto
+@@ -19,28 +19,32 @@ message AudioFile {
+         AAC_24 = 8;
+         AAC_48 = 9;
+         FLAC_FLAC = 16;
++        AAC_160 = 0xa;
++        AAC_320 = 0xb;
++        MP4_128 = 0xc;
++        OTHER5 = 0xd;
+     }
+ }
+ 
+ message File {
+     int32 bitrate = 3;
+     string mime_type = 4;
+-    
++
+     oneof file {
+         ExternalFile external_file = 1;
+         FileIdFile file_id_file = 2;
+     }
+-    
++
+     message ExternalFile {
+         string method = 1;
+         bytes body = 4;
+-        
++
+         oneof endpoint {
+             string url = 2;
+             string service = 3;
+         }
+     }
+-    
++
+     message FileIdFile {
+         string file_id_hex = 1;
+         AudioFile.Format download_format = 2;
+diff --git a/protocol/proto/metadata.proto b/protocol/proto/metadata.proto
+index 056dbcfaf..bb35f6f7d 100644
+--- a/protocol/proto/metadata.proto
++++ b/protocol/proto/metadata.proto
+@@ -34,7 +34,7 @@ message Album {
+     optional bytes gid = 1;
+     optional string name = 2;
+     repeated Artist artist = 3;
+-    
++
+     optional Type type = 4;
+     enum Type {
+         ALBUM = 1;
+@@ -44,7 +44,7 @@ message Album {
+         AUDIOBOOK = 5;
+         PODCAST = 6;
+     }
+-    
++
+     optional string label = 5;
+     optional Date date = 6;
+     optional sint32 popularity = 7;
+@@ -95,7 +95,7 @@ message Track {
+ message ArtistWithRole {
+     optional bytes artist_gid = 1;
+     optional string artist_name = 2;
+-    
++
+     optional ArtistRole role = 3;
+     enum ArtistRole {
+         ARTIST_ROLE_UNKNOWN = 0;
+@@ -122,21 +122,21 @@ message Show {
+     repeated Copyright copyright = 71;
+     repeated Restriction restriction = 72;
+     repeated string keyword = 73;
+-    
++
+     optional MediaType media_type = 74;
+     enum MediaType {
+         MIXED = 0;
+         AUDIO = 1;
+         VIDEO = 2;
+     }
+-    
++
+     optional ConsumptionOrder consumption_order = 75;
+     enum ConsumptionOrder {
+         SEQUENTIAL = 1;
+         EPISODIC = 2;
+         RECENT = 3;
+     }
+-    
++
+     repeated Availability availability = 78;
+     optional string trailer_uri = 83;
+     optional bool music_and_talk = 85;
+@@ -165,14 +165,14 @@ message Episode {
+     optional bool allow_background_playback = 81;
+     repeated Availability availability = 82;
+     optional string external_url = 83;
+-    
++
+     optional EpisodeType type = 87;
+     enum EpisodeType {
+         FULL = 0;
+         TRAILER = 1;
+         BONUS = 2;
+     }
+-    
++
+     optional bool music_and_talk = 91;
+     repeated ContentRating content_rating = 95;
+     optional bool is_audiobook_chapter = 96;
+@@ -207,7 +207,7 @@ message Date {
+ 
+ message Image {
+     optional bytes file_id = 1;
+-    
++
+     optional Size size = 2;
+     enum Size {
+         DEFAULT = 0;
+@@ -215,7 +215,7 @@ message Image {
+         LARGE = 2;
+         XLARGE = 3;
+     }
+-    
++
+     optional sint32 width = 3;
+     optional sint32 height = 4;
+ }
+@@ -242,7 +242,7 @@ message Copyright {
+         P = 0;
+         C = 1;
+     }
+-    
++
+     optional string text = 2;
+ }
+ 
+@@ -255,14 +255,14 @@ message Restriction {
+         SHUFFLE = 3;
+         COMMERCIAL = 4;
+     }
+-    
++
+     optional Type type = 4;
+     enum Type {
+         STREAMING = 0;
+     }
+-    
++
+     repeated string catalogue_str = 5;
+-    
++
+     oneof country_restriction {
+         string countries_allowed = 2;
+         string countries_forbidden = 3;
+@@ -287,7 +287,7 @@ message ExternalId {
+ 
+ message AudioFile {
+     optional bytes file_id = 1;
+-    
++
+     optional Format format = 2;
+     enum Format {
+         OGG_VORBIS_96 = 0;
+@@ -301,6 +301,10 @@ message AudioFile {
+         AAC_24 = 8;
+         AAC_48 = 9;
+         FLAC_FLAC = 16;
++        AAC_160 = 0xa;
++        AAC_320 = 0xb;
++        MP4_128 = 0xc;
++        OTHER5 = 0xd;
+     }
+ }
+ 
