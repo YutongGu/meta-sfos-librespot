@@ -1,0 +1,18 @@
+diff --git a/core/src/file_id.rs b/core/src/file_id.rs
+index 61b3312..6173d0a 100644
+--- a/core/src/file_id.rs
++++ b/core/src/file_id.rs
+@@ -10,7 +10,12 @@ pub struct FileId(pub [u8; 20]);
+ impl FileId {
+     pub fn from_raw(src: &[u8]) -> FileId {
+         let mut dst = [0u8; 20];
+-        dst.clone_from_slice(src);
++        let len = src.len();
++        if len == 16 {
++            dst[..16].clone_from_slice(src);
++        } else if len == 20 {
++            dst.clone_from_slice(src);
++        }
+         FileId(dst)
+     }
+ 

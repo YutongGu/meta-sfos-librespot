@@ -10,7 +10,8 @@ inherit cargo pkgconfig module-base
 SRC_URI += "git://github.com/librespot-org/librespot.git;protocol=https;nobranch=1; \
             file://0001-patch-keepalive-logic.patch \
             file://0002-update-cargo-toml.patch \
-            file://0003-add-podcast-and-audiobook-support.patch"
+            file://0003-add-podcast-and-audiobook-support.patch \
+            file://0004-fix-source-slice-length-mismatch-panic-on-some-tracks.patch"
 SRCREV = "2ea7436e60750d56e747abfca3893be39c0162fd"
 S = "${WORKDIR}/git"
 CARGO_SRC_DIR = ""
